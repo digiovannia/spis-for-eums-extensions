@@ -1,5 +1,30 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Drafted by GPT-5.5 Pro, from Sections 4.2-4.3 of the SPI for EUMs paper
+% 
+% PROMPT:
+%
+% Please review the attached tex and sty files. Now, there's a bug in the paper I want to fix, summarized as follows:
+% 
+% """
+%    As illustrated in Fig. 6 below, Alice adding her PMP never makes her worse off, provided that Bob responds at least as favorably to Alice if she adds the PMP than if she doesn’t, i.e. provided that Bob doesn’t punish Alice. And Bob has no incentive to punish Alice, since, for any fixed renegotiation set of Bob, Alice PMP-extending her set doesn’t add any outcomes that are strictly better for Bob yet worse for Alice than the default renegotiation outcome.
+%
+% As pointed out by Lukas Finnveden, this argument [the second non-punishment Assumption 8ii in the paper] is pretty questionable given the definition of PMP-extension we use. I'm hoping to write up an updated version of the paper that fixes this bug. Roughly, the fix (which I'm not very confident works, but seems promising) would be: Define a class P of CSR programs (Algo 2 here) that:
+%
+%    Against CSR programs outside of P, use a set-valued renegotiation function RN^def.
+%    Against programs in P, use the PMP-extension of RN^def.
+%
+% (The idea being, if Alice's program unconditionally used the PMP-extension, Bob might have an incentive to use a more restrictive renegotiation set against Alice because she adds the PMP. And he can't benefit from this move if Alice only adds the PMP conditional on him not punishing this.)
+% """
+%
+% In other words:
+%
+% """
+% Assumption 4 for renegotiation works because there's a structural constraint baked into the definition of renegotiation programs — they literally cannot play differently against non-renegotiating opponents. PMP-extension has no analogous structural constraint.
+% 
+% The proposed fix: define "PMP-renegotiation functions" (“PRN”) analogously. A PMP-renegotiation function would be one that: against RN programs outside a specified set P, behaves identically to some reference RN^def; and against RN programs inside P (i.e., PRN programs), is the PMP-extension of RN^def. This would build in the structural guarantee: just as rn(p) responds to non-renegotiating programs exactly as p does, a PMP-renegotiation function would respond to non-PMP-renegotiating programs exactly as the reference RN^def does.
+% """
+% 
+% Please write a revision of the tex file that implements this fix. The implementation should fit naturally into the paper, as smoothly and simply as possible. You might need to rework Algo 2, for example, rather than making a whole new "PRN" built on top of Algo 2 itself. Plan this out before proceeding.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
