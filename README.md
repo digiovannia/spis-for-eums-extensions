@@ -8,7 +8,7 @@ Maximizers in Program Games* and related extensions.
 ## Contents
 
 - `main.tex` — main paper (AAMAS `sigconf` format).
-- `spi_for_eums_prn_revision.tex` — revised version.
+- `spi_for_eums_prn_revision.tex` — rough draft of a revision of the CSR algorithm by GPT-5.5 Pro.
 - `beliefcond.tex` — belief-conditional variant.
 - `main.bib` — shared bibliography.
 - `aamas.cls`, `defaults.sty`, `ACM-Reference-Format.bst` — AAMAS class,
