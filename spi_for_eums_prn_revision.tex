@@ -1,0 +1,1546 @@
+
+
+
+
+
+
+
+\documentclass[sigconf]{aamas} 
+
+
+\usepackage{thm-restate}
+
+
+\newcommand{\epsdeltaone}{\epsilon_1}
+\newcommand{\bestparetopayoffi}{u^*_i}
+\newcommand{\bestparetopayoffj}{u^*_j}
+\newcommand{\bestparetopayoffone}{u^*_1}
+\newcommand{\bestparetopayofftwo}{u^*_2}
+\newcommand{\fullresp}{R}
+\newcommand{\history}{h}
+\newcommand{\ponefav}{a_1}
+\newcommand{\ptwofav}{a_2}
+\newcommand{\cost}{\alpha}
+\newcommand{\prop}{p}
+\newcommand{\prior}{q}
+\newcommand{\demandset}{\mathcal{D}}
+\newcommand{\reasonset}{\mathcal{R}}
+\newcommand{\alloc}{x}
+\newcommand{\allocspace}{\mathcal{X}}
+\newcommand{\impartial}{\mathcal{I}}
+\newcommand{\newactspacetwo}{\tilde{\mathcal{A}}_2}
+\newcommand{\allprogrn}{\allprog^{\text{rn}}}
+\newcommand{\allprogreneg}{\allprog^{\text{RN}}}
+\newcommand{\prnsup}{\textnormal{PRN}}
+\newcommand{\prnspacei}{\mathcal{P}_i}
+\newcommand{\prnspacej}{\mathcal{P}_j}
+\newcommand{\prnspaceone}{\mathcal{P}_1}
+\newcommand{\prnspacetwo}{\mathcal{P}_2}
+\newcommand{\allprogprn}{\allprog^{\prnsup}}
+\newcommand{\defrenegi}{{\renegi}^{\textnormal{def}}}
+\newcommand{\defrenegj}{{\renegj}^{\textnormal{def}}}
+\newcommand{\defrenegone}{{\renegone}^{\textnormal{def}}}
+\newcommand{\defrenegtwo}{{\renegtwo}^{\textnormal{def}}}
+\newcommand{\dumbset}{Z}
+\newcommand{\disone}{d_1}
+\newcommand{\distwo}{d_2}
+\newcommand{\disi}{d_i}
+\newcommand{\disj}{d_j}
+\newcommand{\demi}{x_i}
+\newcommand{\demj}{x_j}
+\newcommand{\demone}{x_1}
+\newcommand{\demtwo}{x_2}
+\newcommand{\respi}{r_i}
+\newcommand{\respj}{r_j}
+\newcommand{\resp}{r}
+\newcommand{\probfail}{p}
+\newcommand{\costthreshold}{\underline{\alpha}}
+\newcommand{\fulldisc}{Y}
+\newcommand{\devspace}{P}
+\newcommand{\indicator}[1]{\mathbb{I}[#1]}
+\newcommand{\thr}{t}
+\newcommand{\belief}{Q}
+\newcommand{\tademand}{Y}
+\newcommand{\baseta}{y}
+
+\newcommand{\selection}{sel}%{bar}
+\newcommand{\renegb}{\mathbf{\selection}}
+
+
+
+
+\newcommand{\dirac}[1]{\delta_{#1}}
+\newcommand{\observed}{T}
+\newcommand{\progpayiparetomin}{\progpayi^{\vee}}
+
+\usepackage{amsthm}
+
+\bibliographystyle{ACM-Reference-Format}
+
+\theoremstyle{definition}
+\newtheorem{property}{Property}
+\newtheorem{definition}{Definition} % Create the "definition" environment
+\newtheorem{assumption}[definition]{Assumption}
+\setcounter{property}{0}
+
+\newtheorem*{assum:nopunish}{Assumption 7}
+
+
+
+\newcommand{\mult}{1.15}
+\newcommand{\offs}{0.05}
+\newcommand{\globalflag}{0}
+\newcommand{\pointx}{0.8}%0.65}
+\newcommand{\tritop}{2.4}%1.95} % 3 x pointx
+\newcommand{\tribottom}{0.267}%0.22} % pointx / 3
+
+% --- begin inlined defaults.sty ---
+\usepackage{graphicx,psfrag,amsmath,amsfonts,verbatim}
+\usepackage{amsmath,amsfonts}%,
+\usepackage{changepage}
+\usepackage{latexsym, amscd, amsfonts, eucal, mathrsfs, amsmath, %amssymb,
+amsthm, %xypic,
+xr, stmaryrd, color, enumerate, mathtools}
+\usepackage[utf8]{inputenc}
+\newcommand\myeq{\stackrel{\mathclap{\normalfont\mbox{a.s.}}}{=}}
+\newcommand{\expectation}[4]{\mathbb{E}_{#1 \sim #2(\cdot | #3)}#4}
+\newcommand{\dist}{\mathcal{D}}
+\usepackage{xcolor}
+\definecolor{lightergray}{gray}{0.9}
+
+\usepackage{natbib}
+
+\newcommand{\multilinecomment}[1]{}
+
+\DeclareSymbolFont{bbold}{U}{bbold}{m}{n}
+\DeclareSymbolFontAlphabet{\mathbbold}{bbold}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+
+
+\newcommand{\littler}{rn}%{r}
+\newcommand{\pmsup}{\textnormal{PMM}}%\text{PMM}
+\newcommand{\svsup}{\textnormal{RN}}
+\newcommand{\itsup}{\textnormal{IRN}}
+\newcommand{\csrsup}{\textnormal{RN}}
+\newcommand{\modcsrsup}{\widetilde{\textnormal{CS}}}
+\newcommand{\rensup}{\textnormal{rn}}
+\newcommand{\intsect}{\textbf{AS}}%C}
+\newcommand{\defprog}[1]{{#1}^{\textnormal{def}}}
+\newcommand{\defprogi}{\progi^{\textnormal{def}}}
+\newcommand{\defprogone}{\progone^{\textnormal{def}}}
+\newcommand{\defprogtwo}{\progtwo^{\textnormal{def}}}
+\newcommand{\defprogj}{\progj^{\textnormal{def}}}\newcommand{\defprogmi}{\deffullprog_{-i}}
+\newcommand{\defprogmj}{\deffullprog_{-j}}
+\newcommand{\defprogmji}{\progmj^{\defprogi}}%{\defprog{\progmj}^{i}}
+\newcommand{\defeqprogmji}{\progmj^{\defprog{\irfsprogi(\eqprogi)}}}
+\newcommand{\renegbi}{\mathbf{\selection}^i}
+\newcommand{\renegbmi}{\mathbf{\selection}^{-i}}
+\newcommand{\renegbj}{\mathbf{\selection}^j}
+\newcommand{\bargdefault}{\mathbf{ro}}
+\newcommand{\fullrenegi}{\renegi({K})}%{\underline{\renegi}}
+\newcommand{\fullrenegj}{\renegj({K})}%{\underline{\renegj}}
+\newcommand{\pmp}{\mathbf{PMP}}%{M}
+\newcommand{\yudproj}{\pmp}
+\newcommand{\yudproji}{\pmp_i}
+\newcommand{\yudprojj}{\pmp_j}
+\newcommand{\yudprojone}{\pmp_1}
+\newcommand{\yudprojtwo}{\pmp_2}
+\newcommand{\termemph}[1]{\textbf{#1}}%{\textit{#1}}
+
+\newcommand{\fsspaceireni}{\fsspacei(\renegi)}%{\fsspacei(\renegi, \renegb)}
+\newcommand{\fsspaceinewreni}{\fsspacei(\newrenegi)}%{\fsspacei(\newrenegi, \renegb)}
+\newcommand{\itspaceireni}{\itspacei(\fullrenegi)}%{\itspacei(\fullrenegi, \renegb)}
+\newcommand{\fullfsspacei}{\fsspacei}%{\fsspacei(\renegb)}
+\newcommand{\fullfsspaceone}{\fsspaceone}%{\fsspacei(\renegb)}
+\newcommand{\fullfsspacetwo}{\fsspacetwo}%{\fsspacei(\renegb)}
+\newcommand{\fullitspacei}{\itspacei}%{\itspacei(\renegb)}
+\newcommand{\genfunc}{s}
+
+\newcommand{\corrpolicy}{\boldsymbol{\tau}}
+\newcommand{\gencorr}{\boldsymbol{\mu}}
+\newcommand{\jointstrategy}{\boldsymbol{a}}
+\newcommand{\fulltype}{\mathbf{t}}
+\newcommand{\randomization}{\mathcal{C}}
+\newcommand{\randdomain}{R}
+\newcommand{\punishment}{\boldsymbol{\underline{\tau}}}
+\newcommand{\wrongguess}{y}
+\newcommand{\exploited}{x}
+\newcommand{\tildeps}{\tilde \epsilon}
+\newcommand{\tildtau}{\tilde \tau}
+\newcommand{\overB}{\overline{B}}
+\newcommand{\underB}{\underline{B}}
+\newcommand{\genci}{\tilde{c}_i}
+\newcommand{\gencj}{\tilde{c}_j}
+\newcommand{\genpi}{\widetilde{p}_i}
+\newcommand{\genpj}{\widetilde{p}_j}
+\newcommand{\gencone}{\tilde{c}_1}
+\newcommand{\genctwo}{\tilde{c}_2}
+\newcommand{\genpone}{\tilde{p}_1}
+\newcommand{\genptwo}{\tilde{p}_2}
+\newcommand{\think}{t}
+\newcommand{\actprogone}[1]{\act_1^{#1}}
+\newcommand{\actprogonest}[1]{\act_1^{*#1}}
+\newcommand{\actprogtwo}[1]{\act_2^{#1}}
+\newcommand{\actprogtwost}[1]{\act_2^{*#1}}
+\newcommand{\tiebreakone}{{\text{BR}}_1}
+\newcommand{\tiebreaktwo}{{\text{BR}}_2}
+\newcommand{\tiebreaki}{{\text{BR}}_i}
+\newcommand{\tiebreakj}{{\text{BR}}_j}
+\newcommand{\gentiebreakone}{\widetilde{{\text{BR}}}_1}
+\newcommand{\gentiebreaktwo}{\widetilde{{\text{BR}}}_2}
+\newcommand{\gentiebreaki}{\widetilde{{\text{BR}}}_i}
+\newcommand{\gentiebreakj}{\widetilde{{\text{BR}}}_j}
+\newcommand{\tieseti}{\mathcal{B}_i}
+\newcommand{\tiesetj}{\mathcal{B}_j}
+\newcommand{\fulltie}{\textbf{{\text{BR}}}}
+\newcommand{\genfullact}{\tilde{\fullact}}
+\newcommand{\expset}{\mathcal{T}}
+\newcommand{\decproci}{D_i}
+\newcommand{\decprocj}{D_j}
+\newcommand{\decprocone}{D_1}
+\newcommand{\decproctwo}{D_2}
+\newcommand{\fulldecproc}{\textbf{D}}
+\newcommand{\decspace}{\mathcal{D}}
+\newcommand{\decspaceone}{\mathcal{D}_1}
+\newcommand{\decspacetwo}{\mathcal{D}_2}
+\newcommand{\decspacei}{\mathcal{D}_i}
+\newcommand{\decspacej}{\mathcal{D}_j}
+\newcommand{\yudset}{Y}
+\newcommand{\compyudset}{\tilde{Y}}
+\newcommand{\fullrenegspacej}{\mathcal{r}^{j}}
+\newcommand{\svrenegspace}{\mathcal{R}}
+\newcommand{\svrenegspacei}{\mathcal{R}^{i}}
+\newcommand{\svrenegspacej}{\mathcal{R}^{j}}
+\newcommand{\fullsvspacei}{\underline{\svrenegspacei}}
+\newcommand{\fullrenegspace}{\mathcal{R}}
+\newcommand{\fullsvspace}{\mathcal{R}^{\svsup}}
+\newcommand{\fullsvspacej}{\underline{\svrenegspacej}}
+\newcommand{\uniqyudproj}{y}
+\newcommand{\overyud}{\overline{Y}}
+\newcommand{\deffullact}{\widehat{\fullact}}
+\newcommand{\defacti}{\widehat{a}_i}
+\newcommand{\defactj}{\widehat{a}_j}
+\newcommand{\defactmi}{\deffullact_{-i}}
+\newcommand{\acceptone}{S_1}
+\newcommand{\accepttwo}{S_2}
+\newcommand{\accepti}{S_i}
+\newcommand{\acceptj}{S_j}
+\newcommand{\renega}{\reneg^{\text{I}}}
+\newcommand{\renegk}{\reneg^{(k)}}
+\newcommand{\renegkp}{\reneg^{(k+1)}}
+\newcommand{\renegai}{\reneg^{i,\text{I}}}
+\newcommand{\renegaj}{\reneg^{j,\text{I}}}
+\newcommand{\renegki}{\reneg^{i,(k)}}
+\newcommand{\renegkim}{\reneg^{-i,(k)}}
+\newcommand{\renegkjm}{\reneg^{-j,(k)}}
+\newcommand{\renegkj}{\reneg^{j,(k)}}
+\newcommand{\renegonei}{\reneg^{i,(1)}}
+\newcommand{\renegonej}{\reneg^{j,(1)}}
+\newcommand{\renegbki}{\reneg^{i,(K)}}
+\newcommand{\renegbkj}{\reneg^{j,(K)}}
+\newcommand{\renegtwoi}{\reneg^{i,(2)}}
+\newcommand{\renegtwoj}{\reneg^{j,(2)}}
+\newcommand{\renegkpi}{\reneg^{i,(k+1)}}
+\newcommand{\renegkpj}{\reneg^{j,(k+1)}}
+\newcommand{\renegkmi}{\reneg^{i,(k-1)}}
+\newcommand{\renegkmj}{\reneg^{j,(k-1)}}
+\newcommand{\renegkmmi}{\reneg^{i,(k-2)}}
+\newcommand{\renegkmmj}{\reneg^{j,(k-2)}}
+\newcommand{\renegaone}{\reneg^{1,\text{I}}}
+\newcommand{\renegatwo}{\reneg^{2,\text{I}}}
+\newcommand{\renegkone}{\reneg^{1,(k)}}
+\newcommand{\renegktwo}{\reneg^{2,(k)}}
+\newcommand{\renegoneone}{\reneg^{1,(1)}}
+\newcommand{\renegonetwo}{\reneg^{2,(1)}}
+\newcommand{\renegbkone}{\reneg^{1,(K)}}
+\newcommand{\renegbktwo}{\reneg^{2,(K)}}
+\newcommand{\renegtwoone}{\reneg^{1,(2)}}
+\newcommand{\renegtwotwo}{\reneg^{2,(2)}}
+\newcommand{\renegkpone}{\reneg^{1,(k+1)}}
+\newcommand{\renegkptwo}{\reneg^{2,(k+1)}}
+\newcommand{\renegkmone}{\reneg^{1,(k-1)}}
+\newcommand{\renegkmtwo}{\reneg^{2,(k-1)}}
+\newcommand{\renegc}{\reneg^{\text{II}}}
+\newcommand{\renegci}{\reneg^{i,\text{II}}}
+\newcommand{\renegcj}{\reneg^{j,\text{II}}}
+\newcommand{\newrenega}{{\widetilde{\reneg}}^{\text{I}}}
+\newcommand{\pmm}{\fullpay^{\pmsup}}
+\newcommand{\actpmm}{\fullact^{\pmsup}}
+\newcommand{\pmmi}{\payi^{\pmsup}}
+\newcommand{\pmmip}{\payip^{\pmsup}}
+\newcommand{\pmmj}{\payj^{\pmsup}}
+\newcommand{\pmmone}{\payone^{\pmsup}}
+\newcommand{\pmmtwo}{\paytwo^{\pmsup}}
+\newcommand{\pmmn}{u_n^{\pmsup}}
+\newcommand{\klist}{\{1,\dots,{K}\}}
+\newcommand{\kmlist}{\{1,\dots,{K}-1\}}
+\newcommand{\newrenegb}{\mathbf{\widetilde{B}}}
+\newcommand{\newrenegc}{{\widetilde{\reneg}}^{\text{II}}}
+\newcommand{\newreneg}{{\widetilde{\reneg}}}
+\newcommand{\newrenegi}{{\widetilde{\reneg}}^{i}}
+\newcommand{\newrenegimj}{\renegmj_{\newrenegi}}
+\newcommand{\newrenegj}{{\widetilde{\reneg}}^{j}}
+\newcommand{\newrenegmi}{{\widetilde{\reneg}}^{-i}}
+\newcommand{\newrenegia}{{\widetilde{\reneg}}^{i,\text{{I}}}}
+\newcommand{\newrenegki}{{\widetilde{\reneg}}^{i,(k)}}
+\newcommand{\newrenegkj}{{\widetilde{\reneg}}^{j,(k)}}
+\newcommand{\newrenegone}{{\widetilde{\reneg}}^{1}}
+\newcommand{\newrenegonei}{{\widetilde{\reneg}}^{i,(1)}}
+\newcommand{\newrenegonej}{{\widetilde{\reneg}}^{j,(1)}}
+\newcommand{\newrenegoneone}{{\widetilde{\reneg}}^{1,(1)}}
+\newcommand{\newrenegbki}{{\widetilde{\reneg}}^{i,(K)}}
+\newcommand{\newrenegbkj}{{\widetilde{\reneg}}^{j,(K)}}
+\newcommand{\newrenegbkone}{{\widetilde{\reneg}}^{1,(K)}}
+\newcommand{\newrenegtwoi}{{\widetilde{\reneg}}^{i,(2)}}
+\newcommand{\newrenegtwoj}{{\widetilde{\reneg}}^{j,(2)}}
+\newcommand{\newrenegkpi}{{\widetilde{\reneg}}^{i,(k+1)}}
+\newcommand{\newrenegkpj}{{\widetilde{\reneg}}^{j,(k+1)}}
+\newcommand{\newrenegkmi}{{\widetilde{\reneg}}^{i,(k-1)}}
+\newcommand{\newrenegkmj}{{\widetilde{\reneg}}^{j,(k-1)}}
+\newcommand{\newrenegic}{{\widetilde{\reneg}}^{i,\text{{II}}}}
+\newcommand{\dominate}{D}
+\newcommand{\worsei}{W_i}
+\newcommand{\worsej}{W_j}
+\newcommand{\deffullprog}{\defprog{\fullprog}}
+\newcommand{\defnewfullprog}{{\newfullprog}^{\textnormal{def}}}
+\newcommand{\defnewfullprogi}{{\widetilde{\textbf{\prog}}^{i^{\textnormal{def}}}}}
+\newcommand{\renegx}{\reneg^{X}}
+\newcommand{\renegi}{\reneg^{i}}
+\newcommand{\renegj}{\reneg^{j}}
+\newcommand{\renegmi}{\reneg^{-i}}
+\newcommand{\renegmj}{\reneg^{-j}}
+\newcommand{\renegone}{\reneg^{1}}
+\newcommand{\renegtwo}{\reneg^{2}}
+\newcommand{\genreneg}{\renegj}
+\newcommand{\genrenega}{\renegaj}
+\newcommand{\genrenegc}{\renegcj}
+\newcommand{\genrenegx}{\overline{\reneg}^{X}}
+\newcommand{\renegsta}{{\renegst}^{\text{I}}}
+\newcommand{\renegstb}{\renegb^*}
+\newcommand{\renegstc}{{\renegst}^{\text{II}}}
+\newcommand{\renegstx}{{\renegst}^{X}}
+\newcommand{\renai}{\reni^{\text{I}}}
+\newcommand{\renbi}{B_i}
+\newcommand{\renci}{\reni^{\text{II}}}
+\newcommand{\rencii}{\reni^{i,\text{II}}}
+\newcommand{\renii}{\reni^{i}}
+\newcommand{\renaii}{\reni^{i,\text{I}}}
+\newcommand{\renxi}{\reni^{X}}
+\newcommand{\renaj}{\renj^{\text{I}}}
+\newcommand{\renbj}{B_j}
+\newcommand{\rencj}{\renj^{\text{II}}}
+\newcommand{\renxj}{\renj^{X}}
+\newcommand{\powerset}{\mathbf{C}}
+\newcommand{\effic}{{E}}
+\newcommand{\fullx}{\fullact^{x}}
+\newcommand{\fully}{\fullact^{y}}
+\newcommand{\fullz}{\fullact^{z}}
+\newcommand{\fullw}{\fullact^{w}}
+\newcommand{\game}{G}
+
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\newcommand{\kibitz}[2]{\ifnum\Comments=1\textcolor{#1}{#2}\fi}
+\newcommand{\adigi}[1]{\kibitz{blue}{[AD: #1]}}
+\newcommand{\jc}[1]{\kibitz{red}{[JC: #1]}}
+
+\newcommand{\bctransform}[1]{{#1}^B}
+
+\newcommand{\commentedsection}[2]{%
+    \ifnum#1=1
+        \ignorespaces % Ignores any leading spaces
+        #2
+        \ignorespacesafterend % Ignores any trailing spaces
+    \else
+        \ignorespaces
+        \ignorespacesafterend
+    \fi
+}
+
+\newcommand{\selfunction}[0]{selection}%{bargaining}
+\newcommand{\notsafe}{N}
+\newcommand{\maximini}{u_i^M}
+\newcommand{\maximinj}{u_j^M}
+\newcommand{\maximinip}{u_{i'}^M}
+\newcommand{\maximinone}{u_1^M}
+\newcommand{\maximintwo}{u_2^M}
+\newcommand{\procspace}{\Pi}
+\newcommand{\actdprogone}{\act^{\defprog{\progone}}}
+\newcommand{\typeinformation}{\Theta}
+\newcommand{\minusi}{_{-i}}
+\newcommand{\minusj}{_{-j}}
+\newcommand{\programspace}{P}
+\newcommand{\progmone}{\fullprog_{-1}}
+\newcommand{\progi}{\prog_i}
+\newcommand{\progj}{\prog_j}
+\newcommand{\progmi}{\fullprog_{-i}}
+\newcommand{\progmj}{\fullprog_{-j}}
+\newcommand{\ogactone}{\underline{a}_1}
+\newcommand{\actmisone}{\actspaceone^{\mathcal{M}}}
+\newcommand{\actmistwo}{\actspacetwo^{\mathcal{M}}}
+\newcommand{\actmis}{\actspace^{\mathcal{M}}}
+\newcommand{\progmisi}{\programspace_i^{\mathcal{M}}}
+\newcommand{\progmisj}{\programspace_j^{\mathcal{M}}}
+\newcommand{\progmisone}{\programspace_1^{\mathcal{M}}}
+\newcommand{\progmistwo}{\programspace_2^{\mathcal{M}}}
+\newcommand{\allprog}{\mathcal{P}}
+\newcommand{\fsallprog}[1]{\mathcal{P}^{#1}}
+\newcommand{\fsfullprior}[1]{\fullprior^{#1}}
+\newcommand{\progspacei}{\programspace_i}
+\newcommand{\progspacej}{\programspace_j}
+\newcommand{\progspaceone}{\programspace_1}
+\newcommand{\progspacetwo}{\programspace_2}
+\newcommand{\progspacen}{\programspace_n}
+\newcommand{\bprogmisi}{\bctransform{\programspace}_i^{\mathcal{M}}}
+\newcommand{\bprogmisj}{\bctransform{\programspace}_j^{\mathcal{M}}}
+\newcommand{\bprogmisone}{\bctransform{\programspace}_1^{\mathcal{M}}}
+\newcommand{\bprogmistwo}{\bctransform{\programspace}_2^{\mathcal{M}}}
+\newcommand{\ballprog}{\bctransform{\mathcal{\programspace}}}
+\newcommand{\bprogspacei}{\bctransform{\programspace}_i}
+\newcommand{\bprogspacej}{\bctransform{\programspace}_j}
+\newcommand{\bprogspaceone}{\bctransform{\programspace}_1}
+\newcommand{\bprogspacetwo}{\bctransform{\programspace}_2}
+\newcommand{\progbrone}{\prog_1^{BR}}
+\newcommand{\progbrtwo}{\prog_2^{BR}}
+\newcommand{\progbri}{\prog_i^{BR}}
+\newcommand{\progbrj}{\prog_j^{BR}}
+\newcommand{\cespaceone}{\programspace_1^{CE}}
+\newcommand{\cespacetwo}{\programspace_2^{CE}}
+\newcommand{\actoneone}{\actone^1}
+\newcommand{\actonetwo}{\actone^2}
+\newcommand{\poltwo}{\pi_2}
+\newcommand{\fsspaceone}{\programspace_1^{\csrsup}}
+\newcommand{\fsspacetwo}{\programspace_2^{\csrsup}}
+\newcommand{\onefsspacei}{\programspace_i^{\rensup}}
+\newcommand{\onefsspaceip}{\programspace_{i'}^{\rensup}}
+\newcommand{\onefsspacej}{\programspace_j^{\rensup}}
+\newcommand{\onefsspaceone}{\programspace_1^{\rensup}}
+\newcommand{\onefsspacetwo}{\programspace_2^{\rensup}}
+\newcommand{\fullrenegone}{\underline{\renegone}}\newcommand{\fullrenegtwo}{\underline{\renegtwo}}
+\newcommand{\fsspacei}{\programspace_i^{\csrsup}}
+\newcommand{\fsspacej}{\programspace_j^{\csrsup}}
+\newcommand{\modspacei}{\programspace_i^{\modcsrsup}}
+\newcommand{\modspacej}{\programspace_j^{\modcsrsup}}
+\newcommand{\itspacei}{\programspace_i^{\itsup}}
+\newcommand{\itspacej}{\programspace_j^{\itsup}}
+\newcommand{\itspaceone}{\programspace_1^{\itsup}}
+\newcommand{\itspacetwo}{\programspace_2^{\itsup}}
+\newcommand{\ufsspaceone}{\programspace_1^{E}}
+\newcommand{\ufsspacetwo}{\programspace_2^{E}}
+\newcommand{\ufsspacei}{\programspace_i^{E}}
+\newcommand{\ufsspacej}{\programspace_j^{E}}
+\newcommand{\unispaceone}{\programspace_1^{U}}
+\newcommand{\unispacetwo}{\programspace_2^{U}}
+\newcommand{\unispacei}{\programspace_i^{U}}
+\newcommand{\unispacej}{\programspace_j^{U}}
+\newcommand{\spispaceone}{\programspace_1^{S}}
+\newcommand{\spispacetwo}{\programspace_2^{S}}
+\newcommand{\spispacei}{\programspace_i^{S}}
+\newcommand{\spispacej}{\programspace_j^{S}}
+\newcommand{\nash}[1]{\text{NE}(#1)}
+\newcommand{\subjeq}{\text{SE}}
+\newcommand{\notfsspacei}{\overline{\programspace_i^{\rensup}}}
+\newcommand{\notfsspacej}{\overline{\programspace_j^{\rensup}}}
+\newcommand{\notfsspaceone}{\overline{\programspace_1^{\rensup}}}
+\newcommand{\notfsspacetwo}{\overline{\programspace_2^{\rensup}}}
+\newcommand{\bcrspaceone}{\programspace_1^{D}}
+\newcommand{\bcrspacetwo}{\programspace_2^{D}}
+\newcommand{\fullprogpay}{\textbf{U}}
+\newcommand{\fullpay}{\textbf{u}}
+\newcommand{\bcrspacei}{\programspace_i^{D}}
+\newcommand{\bcrspacej}{\programspace_j^{D}}
+\newcommand{\neweqprogi}{\widetilde{\eqprogi}}
+\newcommand{\neweqprogj}{\widetilde{\eqprogj}}
+\newcommand{\neweqprogone}{\widetilde{\eqprogone}}
+\newcommand{\neweqprogtwo}{\widetilde{\eqprogtwo}}
+\newcommand{\newprogi}{\widetilde{\progi}}
+\newcommand{\newprogj}{\widetilde{\progj}}
+\newcommand{\newprogone}{\widetilde{\progone}}
+\newcommand{\newprogtwo}{\widetilde{\progtwo}}
+\newcommand{\procedure}{\pi}
+\newcommand{\reneg}{\mathbf{RN}}
+\newcommand{\smreneg}{\mathbf{\littler}}
+\newcommand{\smrenegi}{\mathbf{\littler}^i}
+\newcommand{\smrenegj}{\mathbf{\littler}^j}
+\newcommand{\smrenegone}{\mathbf{\littler}^1}
+\newcommand{\smrenegtwo}{\mathbf{\littler}^2}
+\newcommand{\renegst}{\reneg^*}
+\newcommand{\renone}{\textnormal{\littler}_1}
+\newcommand{\rentwo}{\textnormal{\littler}_2}
+\newcommand{\reni}{\textnormal{\littler}_i}
+\newcommand{\renj}{\textnormal{\littler}_j}
+\newcommand{\renstone}{R^*_1}
+\newcommand{\rensttwo}{R^*_2}
+\newcommand{\rensti}{R^*_i}
+\newcommand{\renstj}{R^*_j}
+\newcommand{\fsprogone}{f_1}
+\newcommand{\fsprogtwo}{f_2}
+\newcommand{\fsprogi}{f_i}
+\newcommand{\fsprogj}{f_j}
+\newcommand{\irfsprogone}{f_1^*}
+\newcommand{\irfsprogtwo}{f_2^*}
+\newcommand{\irfsprogi}{f_i^*}
+\newcommand{\irfsprogj}{f_j^*}
+\newcommand{\fullact}{\jointstrategy}
+\newcommand{\fullactst}{\jointstrategy^*}
+\newcommand{\fullactunder}{\underline{\jointstrategy}}
+\newcommand{\fullactover}{\overline{\jointstrategy}}
+\newcommand{\actiover}{\overline{\acti}}
+\newcommand{\actjover}{\overline{\actj}}
+\newcommand{\actoneover}{\overline{\actone}}
+\newcommand{\acttwoover}{\overline{\acttwo}}
+\newcommand{\actist}{\act_i^*}
+\newcommand{\actjst}{\act_j^*}
+\newcommand{\actiunder}{\underline{\act}_i}
+\newcommand{\actjunder}{\underline{\act}_j}
+\newcommand{\actip}{\act_{i'}}
+\newcommand{\actjp}{\act_{j'}}
+\newcommand{\actonest}{\act_1^*}
+\newcommand{\acttwost}{\act_2^*}
+\newcommand{\bfsspaceone}{\bctransform{\programspace}_1^{F}}
+\newcommand{\bfsspacetwo}{\bctransform{\programspace}_2^{F}}
+\newcommand{\progiunder}{\underline{\prog}_i}
+\newcommand{\progjunder}{\underline{\prog}_j}
+\newcommand{\progoneunder}{\underline{\prog}_1}
+\newcommand{\progtwounder}{\underline{\prog}_2}
+\newcommand{\progipunder}{\underline{\prog}_{i'}}
+\newcommand{\progjpunder}{\underline{\prog}_{j'}}
+\newcommand{\simulf}{s_F}
+\newcommand{\simulb}{s_B}
+\newcommand{\simulr}{s_R}
+\newcommand{\follower}{F}
+\newcommand{\actbrtwo}{\acttwo^{BR}}
+\newcommand{\fulltheta}{\boldsymbol{\theta}}
+\newcommand{\fullbehprob}{\textbf{\prior}^B}
+\newcommand{\parti}{F_i}
+\newcommand{\partj}{F_j}
+\newcommand{\partone}{F_1}
+\newcommand{\parttwo}{F_2}
+\newcommand{\behprobi}{\prior_i^B}
+\newcommand{\behprobj}{\prior_j^B}
+\newcommand{\behprobone}{\prior_1^B}
+\newcommand{\behprobtwo}{\prior_2^B}
+\newcommand{\ponece}{\progone^{CE}}
+\newcommand{\ptwoce}{\progtwo^{CE}}
+\newcommand{\bonece}{\burnone^{CE}}
+\newcommand{\btwoce}{\burntwo^{CE}}
+\newcommand{\eqprogone}{\prog_1^*}
+\newcommand{\eqprogtwo}{\prog_2^*}
+\newcommand{\eqprogn}{\prog_n^*}
+\newcommand{\acteqone}{\act_1^*}
+\newcommand{\acteqtwo}{\act_2^*}
+\newcommand{\acteqi}{\act_i^*}
+\newcommand{\acteqj}{\act_j^*}
+\newcommand{\fullfs}{\textbf{f}}
+\newcommand{\irfullfs}{\textbf{f}^*}
+\newcommand{\eqprogi}{\prog_i^*}
+\newcommand{\eqprogip}{\prog_{i'}^*}
+\newcommand{\eqprogj}{\prog_j^*}
+\newcommand{\comspacei}{C_i}
+\newcommand{\comspacej}{C_j}
+\newcommand{\comspaceone}{C_1}
+\newcommand{\comspacetwo}{C_2}
+\newcommand{\burnspacei}{B_i}
+\newcommand{\burnspacej}{B_j}
+\newcommand{\burnspaceone}{B_1}
+\newcommand{\burnspacetwo}{B_2}
+\newcommand{\thetab}{\theta^B}
+\newcommand{\thetar}{\theta^R}
+\newcommand{\thetaf}{\theta^F}
+\newcommand{\thetai}{\theta_i}
+\newcommand{\thetaj}{\theta_j}
+\newcommand{\thetaone}{\theta_1}
+\newcommand{\thetatwo}{\theta_2}
+\newcommand{\priordomaini}{\mathcal{Q}_i}
+\newcommand{\priordomainj}{\mathcal{Q}_j}
+\newcommand{\priordomainij}{\mathcal{Q}_{ij}}
+\newcommand{\priordomainji}{\mathcal{Q}_{ji}}
+\newcommand{\bpriordomaini}{\bctransform{\mathcal{Q}}_i}
+\newcommand{\bpriordomainj}{\bctransform{\mathcal{Q}}_j}
+\newcommand{\bpriordomainij}{\bctransform{\mathcal{Q}}_{ij}}
+\newcommand{\bpriordomainji}{\bctransform{\mathcal{Q}}_{ji}}
+\newcommand{\bpostdomainij}{\bctransform{\mathfrak{Q}}_{ij}}
+\newcommand{\bpostdomainji}{\bctransform{\mathfrak{Q}}_{ji}}
+\newcommand{\bpostdomainonetwo}{\bctransform{\mathfrak{Q}}_{12}}
+\newcommand{\bpostdomaintwoone}{\bctransform{\mathfrak{Q}}_{21}}
+\newcommand{\mpriordomainij}{\bctransform{\mathcal{M}}_{ij}}
+\newcommand{\mpriordomainji}{\bctransform{\mathcal{M}}_{ji}}
+\newcommand{\mpriordomainonetwo}{\bctransform{\mathcal{M}}_{12}}
+\newcommand{\mpriordomaintwoone}{\bctransform{\mathcal{M}}_{21}}
+\newcommand{\priordomainonetwo}{\mathcal{Q}_{12}}
+\newcommand{\priordomaintwoone}{\mathcal{Q}_{21}}
+\newcommand{\bpriordomainonetwo}{\bctransform{\mathcal{Q}}_{12}}
+\newcommand{\bpriordomaintwoone}{\bctransform{\mathcal{Q}}_{21}}
+\newcommand{\bbeldomainij}{\widetilde{\bpriordomainij}}
+\newcommand{\bbeldomainji}{\widetilde{\bpriordomainji}}
+\newcommand{\bbeldomainonetwo}{\widetilde{\bpriordomainonetwo}}
+\newcommand{\bbeldomaintwoone}{\widetilde{\bpriordomaintwoone}}
+\newcommand{\actspace}{A}
+\newcommand{\allact}{\mathcal{A}}
+\newcommand{\actspacei}{A_i}
+\newcommand{\actspacej}{A_j}
+\newcommand{\actspaceone}{A_1}
+\newcommand{\actspacetwo}{A_2}
+\newcommand{\actspacen}{A_n}
+\newcommand{\commiti}{c_i}
+\newcommand{\commitj}{c_j}
+\newcommand{\commitij}{c_i^j}
+\newcommand{\commitjj}{c_j^j}
+\newcommand{\commitii}{c_i^i}
+\newcommand{\commitji}{c_j^i}
+\newcommand{\commitone}{c_1}
+\newcommand{\committwo}{c_2}
+\newcommand{\commitonetwo}{c_1^2}
+\newcommand{\committwotwo}{c_2^2}
+\newcommand{\commitoneone}{c_1^1}
+\newcommand{\committwoone}{c_2^1}
+\newcommand{\burni}{b_i}
+\newcommand{\burnj}{b_j}
+\newcommand{\burnone}{b_1}
+\newcommand{\burntwo}{b_2}
+\newcommand{\priori}{\beta_i}%{q_i}
+\newcommand{\priorj}{\beta_j}%{q_j}
+\newcommand{\genpriorij}{\tilde{q}_{ij}}
+\newcommand{\genpriorji}{\tilde{q}_{ji}}
+\newcommand{\genprioronetwo}{\tilde{q}_{12}}
+\newcommand{\genpriortwoone}{\tilde{q}_{21}}
+\newcommand{\priorij}{\beta_i}%{q_{i}}
+\newcommand{\priorijst}{q_{i}^*}
+\newcommand{\priorjiunder}{\underline{q}_{ji}}
+\newcommand{\priorji}{\beta_j}%{q_{j}}
+\newcommand{\priorjist}{q_{j}^*}
+\newcommand{\priorijunder}{\underline{q}_{ij}}
+\newcommand{\fullmprior}{\boldsymbol{\mu}}
+\newcommand{\mpriorij}{\mu_{ij}}
+\newcommand{\mpriorji}{\mu_{ji}}
+\newcommand{\mprioronetwo}{\mu_{12}}
+\newcommand{\mpriortwoone}{\mu_{21}}
+\newcommand{\fspriorij}[1]{q_{ij}^{#1}}
+\newcommand{\fspriorji}[1]{q_{ji}^{#1}}
+\newcommand{\fsprioronetwo}[1]{q_{12}^{#1}}
+\newcommand{\fspriortwoone}[1]{q_{21}^{#1}}
+\newcommand{\fullfsprior}[1]{\fullprior^{#1}}
+\newcommand{\priorone}{\beta_1}%{q_1}
+\newcommand{\priortwo}{\beta_2}%{q_2}
+\newcommand{\prioronetwo}{\beta_1}%{q_{1}}
+\newcommand{\priortwoone}{\beta_2}%{q_{2}}
+\newcommand{\priorn}{\beta_{n}}%{q_{n}}
+\newcommand{\prioronetwounder}{\underline{q}_{12}}
+\newcommand{\priortwooneunder}{\underline{q}_{21}}
+\newcommand{\fsactmisone}{\overline{\actmisone}}
+\newcommand{\fsactmistwo}{\overline{\actmistwo}}
+\newcommand{\posti}{Q_i}
+\newcommand{\postj}{Q_j}
+\newcommand{\postone}{Q_1}
+\newcommand{\posttwo}{Q_2}
+\newcommand{\belij}{\vec{Q}_{ij}}
+\newcommand{\belji}{\vec{Q}_{ji}}
+\newcommand{\belonetwo}{\vec{Q}_{12}}
+\newcommand{\beltwoone}{\vec{Q}_{21}}
+\newcommand{\belone}{\hat{q}_1}
+\newcommand{\beltwo}{\hat{q}_2}
+\newcommand{\beliefi}{\tau_i}
+\newcommand{\beliefj}{\tau_j}
+\newcommand{\beliefone}{\tau_1}
+\newcommand{\belieftwo}{\tau_2}
+\newcommand{\indices}{_{i=1}^{{n}}}
+\newcommand{\sactspaceone}{\actspaceone^{\textnormal{s}}}
+\newcommand{\sactspacetwo}{\actspacetwo^{\textnormal{s}}}
+\newcommand{\sactspacei}{\actspacei^{\textnormal{s}}}
+\newcommand{\spayone}{\payone^{\textnormal{s}}}
+\newcommand{\spaytwo}{\paytwo^{\textnormal{s}}}
+\newcommand{\spayi}{\payi^{\textnormal{s}}}
+\newcommand{\spayj}{\payj^{\textnormal{s}}}
+\newcommand{\gamesub}{\game^{\textnormal{s}}}
+\newcommand{\fullprog}{\textbf{\prog}}
+\newcommand{\newfullprog}{\widetilde{\textbf{\prog}}}
+\newcommand{\newfullprogi}{{\newfullprog^i}}
+\newcommand{\newfullprogmi}{\newfullprog_{-i}}
+\newcommand{\fulleq}{\textbf{\prog}^*}
+\newcommand{\actfulleq}{\fullact^*}
+\newcommand{\genfulleq}{\tilde{\textbf{\prog}}^*}
+\newcommand{\altprog}{\tilde{\textbf{\prog}}}
+\newcommand{\fullbel}{\vec{\fullpost}}
+\newcommand{\fullprior}{\boldsymbol{\beta}}%{\textbf{q}}
+\newcommand{\fullpriorone}{\textbf{q}^{1}}
+\newcommand{\fullpriorzero}{\textbf{q}^{0}}
+\newcommand{\genfullprior}{\tilde{\textbf{q}}}
+\newcommand{\fullburn}{\textbf{b}}
+\newcommand{\fullcom}{\textbf{c}}
+\newcommand{\progpayh}{U_H}
+\newcommand{\progpaya}{U_A}
+\newcommand{\progpayi}{U_i}
+\newcommand{\progpayj}{U_j}
+\newcommand{\progpayip}{U_{i'}}
+\newcommand{\progpayjp}{U_{j'}}
+\newcommand{\fprogi}{f_i}
+\newcommand{\fprogj}{f_j}
+\newcommand{\fprogone}{f_1}
+\newcommand{\fprogtwo}{f_2}
+\newcommand{\payh}{u_H}
+\newcommand{\paya}{u_A}
+\newcommand{\payi}{u_i}
+\newcommand{\payip}{u_{i'}}
+\newcommand{\payj}{u_j}
+\newcommand{\avgpayi}{\overline{u}_i}
+\newcommand{\avgpayj}{\overline{u}_j}
+\newcommand{\payii}{u_i^i}
+\newcommand{\payji}{u_j^i}
+\newcommand{\payij}{u_i^j}
+\newcommand{\payjj}{u_j^j}
+\newcommand{\avgpayii}{\overline{u}_i^i}
+\newcommand{\avgpayji}{\overline{u}_j^i}
+\newcommand{\avgpayij}{\overline{u}_i^j}
+\newcommand{\fullpostsim}{\fullpost^{S}}
+\newcommand{\avgpayjj}{\overline{u}_j^j}
+\newcommand{\payone}{u_1}
+\newcommand{\paytwo}{u_2}
+\newcommand{\payn}{u_n}
+\newcommand{\progpayone}{U_1}
+\newcommand{\progpaytwo}{U_2}
+\newcommand{\progone}{\prog_1}
+\newcommand{\progtwo}{\prog_2}
+\newcommand{\progn}{\prog_n}
+\newcommand{\progmn}{\fullprog_{-n}}
+\newcommand{\bestone}{b_1}
+\newcommand{\besttwo}{b_2}
+\newcommand{\besti}{b_i}
+\newcommand{\bestj}{b_j}
+\newcommand{\eqbestone}{b^*_1}
+\newcommand{\eqbesttwo}{b^*_2}
+\newcommand{\eqbesti}{b^*_i}
+\newcommand{\eqbestj}{b^*_j}
+\newcommand{\fulleqbest}{\textbf{b}^*}
+\newcommand{\progij}{\prog_i^j}
+\newcommand{\progjj}{\prog_j^j}
+\newcommand{\progii}{\prog_i^i}
+\newcommand{\progji}{\prog_j^i}
+\newcommand{\progonetwo}{\prog_1^2}
+\newcommand{\progtwotwo}{\prog_2^2}
+\newcommand{\progoneone}{\prog_1^1}
+\newcommand{\progtwoone}{\prog_2^1}
+\newcommand{\actone}{a_1}
+\newcommand{\acttwo}{a_2}
+\newcommand{\actn}{a_n}
+\newcommand{\genactone}{\tilde{a}_1}
+\newcommand{\genacttwo}{\tilde{a}_2}
+\newcommand{\genacti}{\tilde{a}_i}
+\newcommand{\genactj}{\tilde{a}_j}
+\newcommand{\response}{\pi}
+\newcommand{\fsactone}{\overline{a}_1}
+\newcommand{\fsacttwo}{\overline{a}_2}
+\newcommand{\fsacti}{\overline{a}_i}
+\newcommand{\fsactj}{\overline{a}_j}
+\newcommand{\fspoltwo}{\overline{\pi}_2}
+\newcommand{\maximize}{M}
+\newcommand{\acti}{a_i}
+\newcommand{\actj}{a_j}
+\newcommand{\payoff}{\mathbf{x}}
+\newcommand{\fullbeliefs}{\boldsymbol{\tau}}
+\newcommand{\simul}{s}
+\newcommand{\simulone}{s_1}
+\newcommand{\simultwo}{s_2}
+\newcommand{\postij}{Q_{ij}}
+\newcommand{\postji}{Q_{ji}}
+\newcommand{\ppostij}{q_{ij}^{\partj}}
+\newcommand{\ppostji}{q_{ji}^{\parti}}
+\newcommand{\ppostonetwo}{q_{12}^{\parttwo}}
+\newcommand{\pposttwoone}{q_{21}^{\partone}}
+\newcommand{\ppostijone}{q_{ij}^{1}}
+\newcommand{\ppostijzero}{q_{ij}^{0}}
+\newcommand{\ppostjione}{q_{ji}^{1}}
+\newcommand{\ppostjizero}{q_{ji}^{0}}
+\newcommand{\ppostonetwozero}{q_{12}^{0}}
+\newcommand{\pposttwoonezero}{q_{21}^{0}}
+\newcommand{\postijj}{Q_{ij}^j}
+\newcommand{\postjii}{Q_{ji}^i}
+\newcommand{\fullpost}{\textbf{Q}}
+\newcommand{\fullpostonetwo}{\textbf{Q}^{12}}
+\newcommand{\fullposttwoone}{\textbf{Q}^{21}}
+\newcommand{\fullbelonetwo}{{\textbf{Q}}^{12}}
+\newcommand{\fullbeltwoone}{{\textbf{Q}}^{21}}
+\newcommand{\fullbelsim}{{\textbf{Q}}^{S}}
+\newcommand{\postonetwo}{Q_{12}}
+\newcommand{\posttwoone}{Q_{21}}
+\newcommand{\postonetwotwo}{Q_{12}^2}
+\newcommand{\posttwooneone}{Q_{21}^1}
+\newcommand{\gpostonetwo}{\tilde{Q}_{12}}
+\newcommand{\gposttwoone}{\tilde{Q}_{21}}
+\newcommand{\gpostij}{\tilde{Q}_{ij}}
+\newcommand{\gpostji}{\tilde{Q}_{ji}}
+\newcommand{\simuli}{s_i}
+\newcommand{\simulj}{s_j}
+\newcommand{\bri}{\pi^*_i}
+\newcommand{\brj}{\pi^*_j}
+\newcommand{\brone}{\pi^*_1}
+\newcommand{\brtwo}{\pi^*_2}
+\newcommand{\altdefprog}[1]{\underline{#1}}
+\newcommand{\willreneg}{\mathcal{R}}
+\newcommand{\prog}{p}
+\newcommand{\weakpoint}{a}
+\newcommand{\attackguess}{b}
+\newcommand{\revelation}{\mathcal{R}}
+\newcommand{\partialrevelation}{\mathcal{T}}
+\newcommand{\eqsolver}{E}
+\newcommand{\nullout}{\emptyset}
+\newcommand{\penaltybehav}{c}
+\newcommand{\penaltyrat}{d_1}
+\newcommand{\penaltyeq}{d_2}
+\newcommand{\penaltypref}{d_3}
+\newcommand{\one}{^{(1)}}
+\newcommand{\two}{^{(2)}}
+\newcommand{\ksup}{^{(k)}}
+\newcommand{\xk}{\mathbf{x}\ksup}
+\newcommand{\xkap}{\mathbf{x}(\kappa)}
+\newcommand{\xkapk}{\mathbf{x}(\kappa\ksup)}
+\newcommand{\ykap}{\mathbf{y}(\kappa)}
+\newcommand{\ykapk}{\mathbf{y}(\kappa\ksup)}
+\newcommand{\act}{a}
+\newcommand{\br}{\text{BR}}
+\newcommand{\fair}{F}
+\newcommand{\dthrfunc}{T_D}
+\newcommand{\sthrfunc}{T_S}
+\newcommand{\barg}{B}
+\newcommand{\funci}{g_i}
+\newcommand{\funcj}{g_j}
+\newcommand{\funcone}{g_1}
+\newcommand{\functwo}{g_2}
+\newcommand{\csprog}{\mathbf{csr}}
+\newcommand{\actset}{A}
+\newcommand{\agsetpmm}[0]{PMM}
+\newcommand{\A}[0]{$A$}
+\newcommand{\B}[0]{$B$}
+
+
+
+\usepackage{makecell}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}%http://ctan.org/pkg/algorithmicx
+
+\usepackage{tikz}
+
+\usetikzlibrary{bayesnet, arrows.meta, shapes, positioning,
+patterns, patterns.meta}
+\usetikzlibrary{matrix, fit}
+\usetikzlibrary{decorations.markings}
+\tikzset{
+    myarrow/.style={
+        -Stealth,
+        shorten >=8pt,
+        shorten <=8pt,
+    },
+    mymatrix/.style={
+        matrix of math nodes
+    },
+}
+
+
+\makeatletter
+\newcommand{\textlabel}[2]{%
+  \@bsphack
+  \csname phantomsection\endcsname % in case hyperref is used
+  \def\@currentlabel{#1}{\label{#2}}%
+  \@esphack
+}
+\makeatother
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{fact}[theorem]{Fact}
+\theoremstyle{definition}
+\newtheorem{exmp}{Example}[section]
+\newtheorem{principle}[theorem]{Principle}
+\newenvironment{sketch}{\paragraph{\normalfont \textsc{Proof Sketch.}}}{\hfill$\square$ \\}
+
+\usepackage{mathtools}
+\newtheorem{remark}[theorem]{Remark}
+% --- end inlined defaults.sty ---
+
+
+\usepackage{balance} % for balancing columns on the final page
+
+
+
+\setcopyright{ifaamas}
+\acmConference[AAMAS '25]{Proc.\@ of the 24th International Conference
+on Autonomous Agents and Multiagent Systems (AAMAS 2025)}{May 19 -- 23, 2025}
+{Detroit, Michigan, USA}{A.~El~Fallah~Seghrouchni, Y.~Vorobeychik, S.~Das, A.~Nowe (eds.)}
+\copyrightyear{2025}
+\acmYear{2025}
+\acmDOI{}
+\acmPrice{}
+\acmISBN{}
+
+
+
+
+\acmSubmissionID{120}
+
+
+\title[AAMAS-2025 Formatting Instructions]{Safe Pareto Improvements
+for \\
+Expected Utility
+Maximizers in Program Games}
+
+
+\author{Anthony DiGiovanni}
+\affiliation{
+  \institution{Center on Long-Term Risk}
+  \city{London}
+  \country{United Kingdom}}
+\email{anthony.digiovanni@longtermrisk.org}
+
+\author{Jesse Clifton}
+\affiliation{
+  \institution{Center on Long-Term Risk}
+  \city{London}
+  \country{United Kingdom}}
+\email{jesse.clifton@longtermrisk.org}
+
+\author{Nicolas Macé}
+\affiliation{
+  \institution{Center on Long-Term Risk}
+  \city{London}
+  \country{United Kingdom}}
+\email{nicolas.mace@longtermrisk.org}
+
+
+
+\begin{abstract}
+Agents in mixed-motive coordination problems such as Chicken may fail to coordinate on a Pareto-efficient outcome. 
+Safe Pareto improvements (SPIs) were originally proposed 
+to mitigate miscoordination in cases where 
+players lack probabilistic beliefs as to how their 
+agents will play a game;
+agents are instructed to behave so as to guarantee a Pareto improvement on how they would play by default.
+More generally, SPIs may be defined as transformations of strategy profiles such that all players are necessarily better off under the transformed profile.
+In this work, we investigate
+the extent to which SPIs can reduce downsides of miscoordination
+between expected utility-maximizing agents. We 
+consider games in which players submit computer programs
+that can condition their decisions on each other's code, 
+and use this property to construct SPIs using programs
+capable of \textit{renegotiation}. 
+We first
+show that under mild conditions on players’ beliefs,
+each player always prefers to use renegotiation.
+Next, we show that
+under similar assumptions,
+each player always prefers
+to be willing to renegotiate  
+at least to the point at which 
+they receive the lowest
+payoff they can attain in any efficient
+outcome.
+Thus 
+subjectively optimal play
+guarantees players at least these payoffs,
+without the need for coordination
+on specific Pareto improvements.
+\end{abstract}
+
+
+
+
+\keywords{program equilibrium; bargaining; Pareto efficiency; Cooperative AI}
+
+
+         
+\newcommand{\BibTeX}{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em\TeX}
+
+
+\begin{document}
+
+
+\pagestyle{fancy}
+\fancyhead{}
+
+
+\subsection{Revised Formal Definition of
+CSR}
+\label{sec:sub:components}
+
+Here 
+is the formal definition of CSR
+programs, with the PMP-renegotiation
+variant built into the same program class.
+For a
+set-valued
+renegotiation
+function~$\renegi$,
+we define
+the space of ordinary
+CSR
+programs
+$\fsspaceireni$
+as before: these are programs
+with the structure
+of
+Algorithm~\ref{alg:csr},
+for some default~$\defprogi$,
+that use~$\renegi$ as their base
+renegotiation function.
+
+We also jointly define a distinguished subclass
+$\prnspacei(\defrenegi)$,
+called
+\termemph{PMP-renegotiation (PRN) programs}.
+A PRN program has the same kind of default
+program as an ordinary CSR program, but it also has
+a \termemph{reference} set-valued renegotiation function
+$\defrenegi$.
+Against CSR programs outside~$\prnspacej$,
+it is evaluated exactly as the ordinary CSR program
+with reference function~$\defrenegi$.
+Against programs inside~$\prnspacej$,
+it is evaluated as the PMP-extension of~$\defrenegi$.
+This is the structural constraint we need:
+adding the PMP is conditional on the counterpart also using a PRN program.
+Thus a counterpart who switches to a non-PRN CSR program in order to
+``punish'' the PMP-extension only faces the reference CSR program,
+not the PMP-extension.
+
+Let~$\fullsvspace$ be the set of all
+set-valued renegotiation 
+functions.
+For each~$i$, let
+$\fullfsspacei = \bigcup_{\renegi \in \fullsvspace} \fsspaceireni$
+and
+$\prnspacei = \bigcup_{\defrenegi \in \fullsvspace}\prnspacei(\defrenegi)$.
+Let
+$\allprogreneg = \fullfsspaceone \times \fullfsspacetwo$
+and
+$\allprogprn = \prnspaceone \times \prnspacetwo$.
+The \selfunction{} function~$\renegb$
+is given to
+the players
+(and we suppress dependence of~$\fullfsspacei$ and~$\prnspacei$ on~$\renegb$ for simplicity).
+For either an ordinary CSR program or a PRN program~$p$,
+write~$\bar{\reneg}^{p}$ for its base/reference function:
+for an ordinary CSR program this is its set-valued renegotiation function,
+and for a PRN program this is its reference set-valued renegotiation function.
+For readability, Algorithm~\ref{alg:csr} writes these two functions as $\bar{\reneg}^{1}$ and $\bar{\reneg}^{2}$.
+
+\begin{algorithm}
+\caption{
+Conditional set-valued
+renegotiation / PRN
+program $\progi$, for some default~$\defprogi$}
+\label{alg:csr}
+\begin{algorithmic}[1]
+\Require Counterpart program $\progj$
+\If{$\progj$ is an ordinary CSR or PRN program, with base/reference function $\bar{\reneg}^{j}$}
+    \State $\deffullact \leftarrow \fullact(\deffullprog)$
+    \If{$\progi \in \prnspacei$ and $\progj \in \prnspacej$}
+        \State ${I}^{\mathrm{def}} \leftarrow \bar{\reneg}^{1}(\bar{\reneg}^{2}, \deffullact) \cap \bar{\reneg}^{2}(\bar{\reneg}^{1}, \deffullact)$
+        \If{${I}^{\mathrm{def}} \neq \emptyset$}
+            \State $\fullact^{\mathrm{def}} \leftarrow \renegb({I}^{\mathrm{def}})$
+        \Else
+            \State $\fullact^{\mathrm{def}} \leftarrow \deffullact$
+        \EndIf
+        \State ${I} \leftarrow \left(\bar{\reneg}^{1}(\bar{\reneg}^{2}, \deffullact) \cup \yudprojone(\fullact^{\mathrm{def}})\right)$
+        \Statex \hspace{1.7cm}$\cap \left(\bar{\reneg}^{2}(\bar{\reneg}^{1}, \deffullact) \cup \yudprojtwo(\fullact^{\mathrm{def}})\right)$ \Comment{PMP-extended agreement set}
+    \Else
+        \State ${I} \leftarrow \bar{\reneg}^{1}(\bar{\reneg}^{2}, \deffullact) \cap \bar{\reneg}^{2}(\bar{\reneg}^{1}, \deffullact)$ \Comment{Reference CSR agreement set}
+    \EndIf
+    \If{${I} \neq \emptyset$}
+        \State $\deffullact \leftarrow \renegb({I})$ \Comment{Renegotiation outcome}
+    \EndIf
+    \State \Return $\defacti$ \Comment{Play renegotiation outcome, or default}
+\Else
+     \State \Return $\defprogi(\progj)$  % \Comment{Play default}
+\EndIf
+\end{algorithmic}
+\end{algorithm}
+
+
+\subsection{Guaranteeing PMM Payoffs Using
+CSR}
+\label{sec:sub:pmm}
+
+
+Suppose
+players always include
+more outcomes in their renegotiation
+sets if their expected
+utility is unchanged.
+So in particular, to show that in subjective equilibrium players use programs
+that guarantee at least the PMM,
+it will suffice to show that
+they weakly prefer these programs.
+
+Then, 
+we will show in
+Theorem~\ref{prop:yudpoint}
+that
+under
+mild assumptions on players' beliefs,
+for any program
+that
+does not guarantee
+a player at least
+their PMM payoff,
+there is a corresponding PRN
+program the player prefers
+that \textit{does}
+guarantee their PMM
+payoff.
+We prove this
+result
+by constructing programs that are identical
+to the programs
+players would otherwise use
+against non-PRN counterparts,
+but that add the player's PMP
+against PRN counterparts.
+For a program $\progi$, we call this
+modified program the
+\termemph{PMP-CSR extension} of~$\progi$
+(Definition~\ref{def:pmp-extension}).
+
+This result requires only the same kind of
+no-punishment assumption used for ordinary renegotiation
+(Assumption~\ref{assum:nopunish}),
+applied to CSR and PRN programs:
+programs that do not use the CSR/PRN machinery are assumed not to
+punish such programs when no renegotiation occurs.
+The PRN construction removes the need for a separate assumption that
+counterparts do not punish PMP-extension itself.
+By construction, if the counterpart is outside~$\prnspacej$,
+player~$i$'s PRN program is evaluated exactly as its reference CSR program.
+If the counterpart is inside~$\prnspacej$, then the counterpart is also using
+the PMP-extension branch.
+Thus the PMP points are added only in the case where the structural response
+is symmetric, rather than in cases where a counterpart has moved to a
+more restrictive non-PRN renegotiation set.
+
+
+For Theorem~\ref{prop:yudpoint}
+we also assume the \selfunction{} function is transitive.
+This is an intuitive property:\ If outcomes are added to the agreement
+set that make \textit{all} players weakly better off
+than the default renegotiation outcome,
+the new renegotiation outcome should be weakly better for all players.
+
+\par The remainder of this subsection provides the formal 
+details for the statement of Theorem \ref{prop:yudpoint}, 
+and a sketch of the proof.
+
+
+\multilinecomment{
+\begin{figure}
+    \centering
+
+  \begin{tabular}{cc}
+
+    \begin{tikzpicture}[scale=1]
+    \usetikzlibrary {shapes.geometric} 
+
+\draw[thick,<->] (-0.4, 0) -- (2.8, 0) node[right] {$x$};
+\draw[thick,<->] (0, -0.4) -- (0, 2.8) node[right] {$y$};
+
+\draw[gray, fill=gray] (0, 0) circle (0.08);
+\draw[gray, fill=gray] (2.4, 0.8) circle (0.08);
+\draw[gray, fill=gray] (0.8, 2.4) circle (0.08);
+\draw[gray, fill=gray] (0.8, 0.8) circle (0.08);
+
+\draw[gray, thick] (0,0) -- (2.4,0.8) -- (0.8,2.4) -- cycle;
+
+\draw[thick,dashed,-] (0.8, 0.8) -- (2.4, 0.8);
+
+\fill[pattern=north east lines, pattern color=gray] 
+
+  (0,0) -- (0.15, 0.45) -- (1.35,0.45) -- cycle;
+  
+\fill[pattern=north west lines, pattern color=gray]
+    (0,0) -- (\pointx, \tritop) -- (\pointx,\tribottom) -- cycle;
+
+   \draw[black, fill=black] (\pointx, 0.8) circle (0.06);
+
+\end{tikzpicture}
+
+
+
+    &
+
+
+
+
+        \begin{tikzpicture}[scale=1]
+    \usetikzlibrary {shapes.geometric} 
+
+\draw[thick,<->] (-0.4, 0) -- (2.8, 0) node[right] {$x$};
+\draw[thick,<->] (0, -0.4) -- (0, 2.8) node[right] {$y$};
+
+\draw[gray, fill=gray] (0, 0) circle (0.08);
+\draw[gray, fill=gray] (2.4, 0.8) circle (0.08);
+\draw[gray, fill=gray] (0.8, 2.4) circle (0.08);
+\draw[gray, fill=gray] (0.8, 0.8) circle (0.08);
+
+\draw[gray, thick] (0,0) -- (2.4,0.8) -- (0.8,2.4) -- cycle;
+
+\draw[thick,dashed,-] (0.8, 0.8) -- (2.4, 0.8);
+
+\fill[pattern=north east lines, pattern color=gray] 
+
+  (0,0) -- (0.15, 0.45) -- (1.35,0.45) -- cycle;
+  
+\fill[pattern=north west lines, pattern color=gray]
+    (0,0) -- (\pointx-0.2, \tritop-0.55) -- (\pointx-0.2,\tribottom-0.08) -- cycle;
+
+   \draw[black, fill=black] (\pointx-0.2, 0.45) circle (0.06);
+
+
+\node[anchor=north east] at (4,3.5) {
+\fbox{
+\begin{tabular}{ll}
+    \tikz\fill[pattern=north east lines,pattern color=gray] (0,0) rectangle (0.25,0.25); & P1's %~$\renegoneone$ 
+    set \\
+ \tikz\fill[pattern=north west lines,pattern color=gray] (0,0) rectangle (0.25,0.25); & P2's set \\
+ \tikz \node [star,
+ star point height=.01cm,
+ minimum size=0.01cm, 
+ star point ratio=0.3,
+ draw]
+       at (\pointx,\pointx) {}; & PMM \\
+\end{tabular}
+}
+};
+
+  
+\end{tikzpicture}
+  
+
+\\
+    \end{tabular}
+    
+    \caption{Caption}
+    \label{fig:enter-label}
+\end{figure}
+}
+
+
+\begin{definition}\label{def:pmp-extension}
+For any ordinary CSR program~$\progi \in \fsspaceireni$,
+the \textbf{PMP-CSR extension}~$\widetilde{\progi} \in \prnspacei(\renegi)$
+is the PRN program with the same default program as~$\progi$
+and reference function~$\renegi$.
+Thus, if the counterpart is not in~$\prnspacej$,
+$\widetilde{\progi}$ is evaluated exactly as~$\progi$.
+If the counterpart is a PRN program in~$\prnspacej(\defrenegj)$,
+write~$\deffullact$ for the action profile induced by the two defaults,
+let
+\[
+    {I}^{\mathrm{def}}
+    = \renegi(\defrenegj, \deffullact)
+    \cap \defrenegj(\renegi, \deffullact),
+\]
+and let~$\fullact^{\mathrm{def}} = \renegb({I}^{\mathrm{def}})$ if
+${I}^{\mathrm{def}} \neq \emptyset$, and
+$\fullact^{\mathrm{def}}=\deffullact$ otherwise.
+Then the active renegotiation set used by~$\widetilde{\progi}$ is
+\[
+    \renegi(\defrenegj, \deffullact)
+    \cup \yudproji(\fullact^{\mathrm{def}}).
+\]
+\end{definition}
+
+\begin{assumption}
+     We say that 
+     players 
+     with beliefs $\fullprior$ 
+     \textbf{are certain that CSR/PRN won't be punished} 
+     if the following holds:
+     \begin{enumerate}[(i)]
+      \item Suppose either $\progi$ is in a subjective equilibrium
+     of~$\game(\allprog \cup \allprogreneg \cup \allprogprn)$,
+     or $\progi$ is in the support of $\priorji$.
+      Suppose $\progi \notin \fsspacei \cup \prnspacei$. 
+         Then for any $\progj \in  \fsspacej \cup \prnspacej$,
+         we have 
+         $\progi(\progj) = \progi(\defprogj)$.
+         \label{subassum:csrwlog}
+     \end{enumerate}
+     \label{assum:nopunish}
+\end{assumption}
+
+\begin{figure}
+    \centering
+     \begin{tikzpicture}[scale=1]
+    \usetikzlibrary {shapes.geometric} 
+
+\draw[thick,<->] (-0.4, 0) -- (2.8, 0) node[right] {$x$};
+\draw[thick,<->] (0, -0.4) -- (0, 2.8) node[right] {$y$};
+
+\draw[gray, fill=gray] (0, 0) circle (0.08);
+\draw[gray, fill=gray] (2.4, 0.8) circle (0.08);
+\draw[gray, fill=gray] (0.8, 2.4) circle (0.08);
+\draw[gray, fill=gray] (0.8, 0.8) circle (0.08);
+\draw[gray, thick] (0,0) -- (2.4,0.8) -- (0.8,2.4) -- cycle;
+
+\fill[pattern=north east lines, pattern color=gray] 
+(0,0) -- (0.4, 1.2) -- (0.4, 0.6) -- (1.8,0.6) -- cycle;
+  
+  
+\fill[pattern=north west lines, pattern color=gray]
+   (0,0) -- (0.8, 2.4) -- (0.8,0.3) -- cycle;
+
+\draw[black,fill=black] (-0.08, -0.08) rectangle (0.08, 0.08);
+
+ \draw[black, fill=black] (0.4, 1.2) circle (0.06);
+
+\draw[thick,dashed,-] (0.8, 1.2) -- (2, 1.2);
+
+
+\node[anchor=north east] at (7,3) {
+\fbox{
+\begin{tabular}{ll}
+ \tikz\node[rectangle,draw,fill=black] at (0.3,0.3) {}; & $\fullact(\deffullprog)$ \\
+    \tikz\fill[pattern=north east lines,pattern color=gray] (0,0) rectangle (0.3,0.3); & $\renegone(\renegtwo, \fullact(\deffullprog))$ \\
+ \tikz\fill[pattern=north west lines,pattern color=gray] (0,0) rectangle (0.3,0.3); & $\renegtwo(\renegone, \fullact(\deffullprog))$ \\
+    \tikz\node[circle,draw,fill=black,scale=0.6] at (0,0) {}; & $\fullact(\fullprog)$ \\ 
+ \tikz[baseline]{\draw[dashed] (0,0.1) -- (0.35,0.1);}
+ & $\yudprojone(\fullact(\fullprog))$ \\
+\end{tabular}
+}
+};
+
+  
+\end{tikzpicture}
+    \caption{Illustration of the argument for Theorem~\ref{prop:yudpoint}.
+    The black circle is the reference CSR renegotiation outcome,
+    $\fullact^{\mathrm{def}}$.
+    If both players use PRN programs, player~1 adds the black striped
+    segment $\yudprojone(\fullact^{\mathrm{def}})$ to their reference
+    renegotiation set, and player~2 symmetrically uses their PRN branch.
+    If player~2 is not in~$\prnspacetwo$, player~1 instead uses the
+    unextended reference set $\renegone(\renegtwo, \fullact(\deffullprog))$.
+    Thus a non-PRN counterpart cannot make themselves better off by
+    switching to a restrictive renegotiation set in response to PMP points:
+    against that counterpart, those PMP points are not added.
+    }
+    \label{fig:pmp}
+    \Description{The default renegotiation outcome a(p) is marked with a black circle. A black striped segment shows Player 1's PMP of this outcome, PMP₁(a(p)), which includes points that make both players weakly better off than a(p) while not making Player 2 strictly better off. The shaded region represents Player 1's renegotiation set RN¹(RN², a(p^def)).}
+\end{figure}
+\begin{restatable}{theorem}{pmmguarantee}
+\label{prop:yudpoint}
+Let~$\game(\allprog)$ be a program game,
+and~$\renegb$ be any transitive \selfunction{} function.
+Suppose
+the action sets of~$\game$
+are continuous, so
+that for any~$\fullact \in \allact$,
+player~$i$'s PMP of that action profile
+$\yudproji(\fullact)$
+is nonempty.
+Let~$\fullprior$ be any belief profile
+satisfying the assumption 
+that players are certain that CSR/PRN won't be punished
+(Assumption~\ref{assum:nopunish}).
+
+ Then,
+ for any subjective equilibrium~$(\fullprog, \fullprior)$ of
+ $\game(\allprog \cup \allprogreneg \cup \allprogprn)$
+ where $\progpayi(\fullprog) < \pmmi$ 
+ for some~$i$,
+ there exists~$\fullprog' \in \allprogprn$
+ such that:
+    \begin{enumerate}
+        \item For all~$i$, $\progi'$ is a PMP-CSR extension
+        with the same default behavior as~$\progi$.
+    \item $\fullprogpay(\fullprog') \succeq \pmm$.
+    \item $(\fullprog', \fullprior)$
+      is a subjective equilibrium
+      of  $\game(\allprog \cup \allprogreneg \cup \allprogprn)$.
+    \end{enumerate}
+\end{restatable}
+\begin{sketch}
+Assumption~\ref{assum:nopunish}
+implies that any program outside the CSR/PRN class is payoff-equivalent,
+against the relevant beliefs,
+to an ordinary CSR program that has the original program as its default
+and always returns the empty renegotiation set.
+So it suffices to consider ordinary CSR programs and PRN programs.
+
+Take any ordinary CSR program~$\progi$ with base function~$\renegi$,
+and replace it with its PMP-CSR extension~$\newprogi \in \prnspacei(\renegi)$.
+Against any counterpart outside~$\prnspacej$,
+Algorithm~\ref{alg:csr} evaluates~$\newprogi$ exactly as the reference
+CSR program~$\progi$.
+Against a counterpart inside~$\prnspacej$,
+both programs use their PRN branches: each starts from the reference CSR
+agreement set and adds their PMP of the reference CSR outcome.
+The only new outcomes that can become relevant for player~$i$ are therefore
+weak Pareto improvements on the reference CSR outcome.
+Because the \selfunction{} function is transitive,
+player~$i$ is weakly better off in this case as well.
+Thus each player weakly prefers their PMP-CSR extension.
+
+When all players use PMP-CSR extensions,
+the agreement set contains each player's PMP of the reference CSR outcome.
+Any agreement-set outcome giving some player less than their PMM payoff is
+Pareto-dominated by an outcome in the intersection of these PMPs, and so
+cannot be selected by a \selfunction{} function that chooses an efficient
+point from the agreement set.
+Therefore the resulting program profile guarantees every player at least
+PMM payoff, and the weak-improvement argument above preserves subjective
+equilibrium.
+\end{sketch}
+
+
+\textit{Remark:} Notice that the argument above does not require players
+to refrain from using programs that implement other kinds of SPIs.
+A player might, for example, use a CSR program whose reference set is
+self-favoring rather than PMP-based.
+The theorem says that, whatever reference CSR behavior the player starts from,
+they weakly prefer the corresponding PRN wrapper:
+outside the PRN class the wrapper behaves like the reference program, and
+inside the PRN class it adds the PMP.
+This also explains why the PMP is the natural extension rather than a larger
+set of Pareto improvements.
+Adding outcomes that are better for the counterpart and worse for the focal
+player would no longer be protected by the same structural argument: against
+PRN counterparts those outcomes might be selected, and against non-PRN
+counterparts the PRN wrapper deliberately does not add them.
+
+
+\
+
+We can now formalize the claim that
+PRN-augmented CSR
+is an SPI
+that partially solves
+SPI selection:
+for any reference profile of set-valued renegotiation functions,
+the mapping from programs~$\fullprog$
+to PRN programs using~$\fullprog$ as defaults
+is an SPI that guarantees players
+their PMM payoffs under the assumptions of
+Theorem~\ref{prop:yudpoint}.
+
+\begin{proposition}
+\label{prop:itspi}
+For $i=1,2$,
+for some \selfunction{} function~$\renegb$,
+define 
+$\fsprogi^{\renegi}: \progspacei \rightarrow \prnspacei(\renegi)$ such that,
+for each $\progi \in \progspacei$, $\fsprogi^{\renegi}(\progi)$
+is the PMP-CSR extension with reference function~$\renegi$ and
+$\defprog{\fsprogi^{\renegi}(\progi)} = \progi$.
+Then, 
+under the assumptions of 
+Theorem~\ref{prop:yudpoint},
+for any~$(\renegone, \renegtwo)$:
+\begin{enumerate}
+    \item The function
+    $\fullfs^{\reneg}: \fullprog \mapsto (\fsprogone^{\renegone}(\progone), \fsprogtwo^{\renegtwo}(\progtwo))$ is an SPI.
+    \item For all~$i$,
+    $\progpayi(\fullfs^{\reneg}(\deffullprog)) \geq \max\{\progpayi(\deffullprog), \pmmi\}$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+This follows
+immediately
+from the argument used to prove 
+Theorem~\ref{prop:yudpoint}.
+\end{proof}
+
+
+\section{Proof of Theorem~\ref{prop:yudpoint} }
+
+Denote 
+the \textbf{agreement set} as 
+     $\intsect(\renegi, \renegmi, \fullact) = \bigcap_{j=1}^{n} \renegj(\renegmj, \fullact)$.
+
+For the ${n}$-player proof, the PRN branch of
+Algorithm~\ref{alg:csr} is read as follows.
+For a profile of base/reference functions~$(\bar{\reneg}^{j})_{j=1}^{n}$
+and default action profile~$\deffullact$, let
+\[
+    {I}^{\mathrm{def}}
+    = \bigcap_{j=1}^{n} \bar{\reneg}^{j}(\bar{\reneg}^{-j}, \deffullact),
+\]
+and let~$\fullact^{\mathrm{def}}=\renegb({I}^{\mathrm{def}})$ if
+${I}^{\mathrm{def}}\neq\emptyset$, and
+$\fullact^{\mathrm{def}}=\deffullact$ otherwise.
+When all players are in their PRN classes, player~$i$'s active
+renegotiation set is
+\[
+    \bar{\reneg}^{i}(\bar{\reneg}^{-i}, \deffullact)
+    \cup \yudproji(\fullact^{\mathrm{def}}).
+\]
+When at least one player is outside the PRN class, the algorithm uses the
+reference CSR sets~$\bar{\reneg}^{i}(\bar{\reneg}^{-i},\deffullact)$
+without adding PMP points.
+
+\pmmguarantee*
+
+\begin{proof}
+Let~$(\fullprog, \fullprior)$
+be a subjective equilibrium
+of $\game(\allprog \cup \allprogreneg \cup \allprogprn)$.
+First, any program outside the ordinary CSR and PRN classes can be replaced,
+without changing its payoff against the relevant beliefs,
+by an ordinary CSR program whose default is the original program and whose
+renegotiation set is always empty.
+Indeed, if the counterpart profile does not enter the CSR/PRN branch, the new
+program directly calls its default.
+If the counterpart profile does enter that branch, the empty agreement set
+again makes the new program play its default; by
+Assumption~\ref{assum:nopunish}, the counterpart programs also respond as
+they would to the default.
+Thus we may restrict attention to ordinary CSR programs and PRN programs.
+
+For each player~$i$, let~$\progi^0$ be the reference ordinary CSR program
+associated with~$\progi$: if~$\progi$ is ordinary CSR, let
+$\progi^0=\progi$; if~$\progi$ is PRN, let~$\progi^0$ be the ordinary CSR
+program with the same default and reference function.
+Let~$\progi'$ be the PMP-CSR extension of~$\progi^0$.
+We show that~$\progi'$ is weakly better for player~$i$ against every
+counterpart profile in the support of~$\priorij$.
+
+If the counterpart profile is not entirely composed of PRN programs, then by
+construction Algorithm~\ref{alg:csr} evaluates~$\progi'$ exactly as the
+reference CSR program~$\progi^0$.
+So the outcome is unchanged relative to the reference behavior.
+If the counterpart profile is entirely composed of PRN programs, then every
+player's active set is their reference CSR set plus their PMP of the reference
+CSR outcome~$\fullact^{\mathrm{def}}$.
+The only outcomes added to the agreement set that can change player~$i$'s
+payoff are weak Pareto improvements on~$\fullact^{\mathrm{def}}$.
+Since~$\renegb$ is transitive, selecting from the enlarged agreement set makes
+player~$i$ weakly better off than selecting from the reference agreement set.
+Thus~$\progi'$ is weakly better for player~$i$ against every program profile in
+the support of their beliefs.
+Applying this argument for each player, the profile
+$\fullprog'=(\progi')_{i=1}^{n}$ is also a subjective equilibrium.
+
+It remains to show that~$\fullprog'$ guarantees PMM payoffs.
+Let~$\fullact^{\mathrm{def}}$ be the reference CSR outcome for the defaults
+and reference functions of~$\fullprog'$.
+Since all players are PRN at~$\fullprog'$, the agreement set contains
+\[
+    \bigcap_{i=1}^{n} \yudproji(\fullact^{\mathrm{def}}).
+\]
+Every point in this intersection gives every player at least
+$\max\{\payi(\fullact^{\mathrm{def}}),\pmmi\}$.
+Therefore any point in the agreement set that gives some player less than
+PMM is Pareto-dominated by a point in this intersection.
+Because~$\renegb$ selects a point that is Pareto-efficient within the
+agreement set, it cannot select such a below-PMM point.
+Hence~$\fullprogpay(\fullprog') \succeq \pmm$, as required.
+\end{proof}
+
+
+
+
+
+\end{document}
+
+
