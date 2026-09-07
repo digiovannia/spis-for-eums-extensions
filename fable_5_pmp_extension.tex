@@ -1,0 +1,305 @@
+% ============================================================================
+% SINGLE-CLASS IMPLEMENTATION OF THE PRN FIX
+%
+% Idea: the paper's set-valued renegotiation functions are *already*
+% conditional --- they take the counterpart's renegotiation function as an
+% argument (Definition of \svrenegspacei: functions from
+% \svrenegspacej x \allact to C(\allact)). So the structural constraint
+% ("only add the PMP against counterparts who reciprocate") can live inside
+% the renegotiation function itself. Consequences:
+%   - Algorithm 2 (alg:csr) is UNCHANGED.
+%   - The program spaces \fsspacei, \allprogreneg, and hence the statement
+%     of the game \game(\allprog \cup \allprogreneg), are UNCHANGED
+%     (a PMP-extended program is just a CSR program with a particular
+%     renegotiation function).
+%   - Only Definition 6 (def:pmp-extension) and Assumption 8
+%     (assum:nopunish) change, plus the surrounding discussion and proof.
+%
+% This snippet contains: (0) a small piece of notation; (1) the revised
+% Definition 6; (2) a well-definedness remark; (3) the revised Assumption 8;
+% (4) replacement expository text for the passage introducing the
+% assumptions (main.tex ll. 2879--2936); (5) the revised proof sketch;
+% (6) notes on the required changes to the appendix proof, including a fix
+% to a step that is stated incorrectly in the model's draft.
+% ============================================================================
+
+
+% ---------------------------------------------------------------------------
+% (0) Notation: reference renegotiation outcome.
+% (Place just before Definition 6. The appendix already defines a related
+% object \bargdefault^{(k)} for ICSR; this is its one-shot analogue.)
+% ---------------------------------------------------------------------------
+
+For set-valued renegotiation functions~$\renegi, \renegj$ and an
+outcome~$\fullact$, define the \termemph{reference renegotiation outcome}
+\begin{align*}
+\bargdefault(\renegi, \renegj, \fullact) =
+     \begin{cases}
+         \renegb\left(\renegi(\renegj, \fullact) \cap \renegj(\renegi, \fullact)\right),
+         & \text{if } \renegi(\renegj, \fullact) \cap \renegj(\renegi, \fullact) \neq \emptyset; \\
+         \fullact, & \text{otherwise.}
+    \end{cases}
+\end{align*}
+
+% ---------------------------------------------------------------------------
+% (1) Revised Definition 6.
+% ---------------------------------------------------------------------------
+
+\begin{definition}\label{def:pmp-extension}
+Define the \termemph{PMP-extension} operator
+$\mathcal{E}_i : \svrenegspacei \to \svrenegspacei$ as follows.
+For any~$\renegi \in \svrenegspacei$, the PMP-extension
+$\newrenegi = \mathcal{E}_i(\renegi)$ is given, for
+all~$\rho^{j} \in \svrenegspacej$ and~$\fullact \in \allact$, by
+\begin{align*}
+    \newrenegi(\rho^{j}, \fullact) =
+    \begin{cases}
+        \renegi(\renegj, \fullact)
+        \, \cup \,
+        \yudproji\!\left(\bargdefault(\renegi, \renegj, \fullact)\right),
+        & \text{if } \rho^{j} = \mathcal{E}_j(\renegj)
+        \text{ for some } \renegj \in \svrenegspacej; \\[2pt]
+        \renegi(\rho^{j}, \fullact),
+        & \text{otherwise.}
+    \end{cases}
+\end{align*}
+The PMP-extension of a CSR program~$\progi \in \fsspaceireni$ is the
+program~$\newprogi \in \fsspaceinewreni$ with
+$\defprog{\newprogi} = \defprogi$.
+\end{definition}
+
+% Consequence worth stating in-text right after the definition:
+Notice that if both players use PMP-extensions, the agreement set computed
+by Algorithm~\ref{alg:csr} is
+\begin{align*}
+    \left[\renegone(\renegtwo, \deffullact) \cup \yudprojone(\fullact^{\mathrm{def}})\right]
+    \cap
+    \left[\renegtwo(\renegone, \deffullact) \cup \yudprojtwo(\fullact^{\mathrm{def}})\right],
+    \quad \text{where } \fullact^{\mathrm{def}} = \bargdefault(\renegone, \renegtwo, \deffullact),
+\end{align*}
+while against any counterpart whose renegotiation function is not a
+PMP-extension, $\newrenegi$ returns exactly the same sets as~$\renegi$.
+Thus a counterpart cannot gain from responding to the PMP-extension with a
+more restrictive renegotiation set:\ against any such counterpart, the
+PMP points are simply not offered, and the extension is behaviorally
+indistinguishable from~$\renegi$.
+
+% ---------------------------------------------------------------------------
+% (2) Well-definedness remark (footnote or short remark after Def. 6).
+% ---------------------------------------------------------------------------
+
+% Suggested footnote text:
+\footnote{For this definition to be well-posed, PMP-extensions must be
+identified \textit{intensionally}:\ we take $\mathcal{E}_j(\renegj)$ to be
+a canonical program implementing the two cases above, with the
+base~$\renegj$ recoverable from its source code, so that
+``$\rho^{j} = \mathcal{E}_j(\renegj)$ for some~$\renegj$'' is a syntactic
+condition and the base is unique. (Identified extensionally, the
+definition would be circular --- the first case quantifies over the image
+of the operator being defined --- and the base need not be recoverable.)
+This is the same device already used in Algorithms~\ref{alg:renegotiation}
+and~\ref{alg:csr}, whose membership checks
+``$\progj \in \fsspacej(\renegj)$ for some~$\renegj$'' are conditions on
+the structure of the counterpart's code. Note also
+that~$\mathcal{E}_i$ indeed maps~$\svrenegspacei$ to itself:\ since
+every point of~$\renegi(\renegj, \fullact)$ weakly Pareto-improves
+on~$\fullact$, so does~$\bargdefault(\renegi, \renegj, \fullact)$, and
+hence so does every point
+of~$\yudproji(\bargdefault(\renegi, \renegj, \fullact))$.}
+
+% ---------------------------------------------------------------------------
+% (3) Revised Assumption 8.
+% Part (i) is unchanged. Part (ii) is replaced by the exact analogue of
+% Assumption 4 / part (i): no program responds differently to a
+% PMP-extension than to its base --- justified because the extension
+% responds *identically* to any function that is not itself an extension.
+% ---------------------------------------------------------------------------
+
+\begin{assumption}
+     We say that
+     players
+     with beliefs $\fullprior$
+     \textbf{are (i) certain that CSR won't be punished and (ii) certain
+     that PMP-extension won't be punished}
+     if the following hold:
+     \begin{enumerate}[(i)]
+      \item Suppose either $\progi$ is in a subjective equilibrium
+     of~$\game(\allprog \cup \allprogreneg)$,
+     or $\progi$ is in the support of $\priorji$.
+      Suppose $\progi \notin \fsspacei$.
+         Then for any $\progj \in  \fsspacej$,
+         we have
+         $\progi(\progj) = \progi(\defprogj)$.
+         \label{subassum:csrwlog}
+         \item Suppose either $\progj \in \fsspacej(\rho^{j})$ is in a
+     subjective equilibrium of~$\game(\allprog \cup \allprogreneg)$, or
+     $\progj$ is in the support of~$\priorij$, where~$\rho^{j}$ is not the
+     PMP-extension of any set-valued renegotiation function.
+     Then for any~$\renegi \in \svrenegspacei$ with
+     PMP-extension~$\newrenegi = \mathcal{E}_i(\renegi)$ and
+     all~$\fullact$, we have
+     $\rho^{j}(\newrenegi, \fullact) = \rho^{j}(\renegi, \fullact)$.
+     \label{subassum:extension}
+     \end{enumerate}
+      \label{assum:nopunish}
+\end{assumption}
+
+% ---------------------------------------------------------------------------
+% (4) Replacement expository text (for main.tex ll. 2879--2936, the passage
+% introducing the two assumptions; adapt the lead-in as needed).
+% ---------------------------------------------------------------------------
+
+This result requires two assumptions on players' beliefs and the structure
+of programs used in subjective equilibrium
+(Assumptions~\ref{assum:nopunish}\ref{subassum:csrwlog}
+and~\ref{assum:nopunish}\ref{subassum:extension}), both instances of the
+same non-punishment principle as
+Assumption~\ref{assum:rennopun} of Proposition~\ref{prop:simultaneous}:\
+players do not respond differently to programs that do not respond
+differently to them.
+\begin{enumerate}
+    \item Assumption~\ref{assum:nopunish}\ref{subassum:csrwlog}
+is equivalent to
+Assumption~\ref{assum:rennopun}
+applied to CSR programs
+rather than renegotiation programs:\ For any program
+used in subjective equilibrium
+or in the support of a player's
+beliefs,
+if that program never renegotiates,
+it responds identically
+to counterpart CSR programs
+as to their defaults.
+\item Assumption~\ref{assum:nopunish}\ref{subassum:extension} is the same
+principle applied to renegotiation functions:\ no renegotiation function
+used in subjective equilibrium or in the support of a player's beliefs
+responds differently to the PMP-extension~$\newrenegi$ than to its
+base~$\renegi$, unless it is itself a PMP-extension (in which case its
+response is fixed by Definition~\ref{def:pmp-extension}).
+This assumption is justified by the conditional structure of the
+PMP-extension:\ by construction, $\newrenegi$ returns \textit{exactly the
+same renegotiation sets} as~$\renegi$ against any function that is not a
+PMP-extension. A counterpart therefore faces an identical decision problem
+against~$\newrenegi$ as against~$\renegi$, and in particular cannot
+benefit from restricting their renegotiation set in response to the
+extension --- the PMP points they might hope to extract are only added
+against counterparts who reciprocate.
+(This is where the conditionality is essential. If player~$i$ added
+their PMP \textit{unconditionally}, then~$\newrenegi$ would behave
+differently toward~$j$ than~$\renegi$ does, and~$j$ might strictly prefer
+a more restrictive renegotiation set against it --- for instance, to
+induce the \selfunction{} function to choose among the added points. The
+analogous assumption would then amount to assuming away a genuine
+incentive, rather than ruling out gratuitous punishment.)
+\end{enumerate}
+
+% ---------------------------------------------------------------------------
+% (5) Revised proof sketch for Theorem 3 (replaces main.tex ll. 3279--3329).
+% ---------------------------------------------------------------------------
+
+\begin{sketch}
+Assumption~\ref{assum:nopunish}\ref{subassum:csrwlog}
+implies that players always use CSR programs, so consider a subjective
+equilibrium in CSR programs, and for each player~$i$ let~$\newprogi$ be
+the PMP-extension of~$\progi$ (if~$\progi$'s renegotiation function is
+already a PMP-extension, let~$\newprogi = \progi$).
+Against any counterpart~$\progj$ in the support of~$i$'s beliefs whose
+renegotiation function is not a PMP-extension, $\newrenegi$ returns the
+same sets as~$\renegi$, and by
+Assumption~\ref{assum:nopunish}\ref{subassum:extension}, $\progj$'s
+renegotiation function responds identically to both; so the outcome is
+unchanged.
+Against a counterpart whose renegotiation function \textit{is} a
+PMP-extension, the agreement set changes only by the addition of PMP
+points of the reference renegotiation
+outcome~$\fullact^{\mathrm{def}}$
+--- all of which weakly Pareto-improve
+on~$\fullact^{\mathrm{def}}$ --- so
+because the \selfunction{} function is transitive, the new renegotiation
+outcome is no worse for~$i$.
+Therefore each player always weakly prefers to replace their program with
+its PMP-extension, and the extended profile remains a subjective
+equilibrium.
+Finally, when all players use PMP-extensions, the agreement set contains
+each player's PMP of~$\fullact^{\mathrm{def}}$, and no point that is worse
+than the PMM for some player can be Pareto-efficient within it; so the
+\selfunction{} function guarantees each player at least their PMM payoff.
+\end{sketch}
+
+% ---------------------------------------------------------------------------
+% (6) NOTES ON THE APPENDIX PROOF (not paper text).
+% ---------------------------------------------------------------------------
+%
+% (a) The reduction "wlog all programs are CSR" (main.tex ll. 3882--3899)
+%     is unchanged: it only uses Assumption 8(i).
+%
+% (b) The case analysis for weak preference becomes:
+%       - rho^j not a PMP-extension: identical outcomes, by 8(ii)
+%         [replaces the old "S^PMP = empty / nonempty" split, which relied
+%         on the old 8(ii)].
+%       - rho^j = E_j(r^j): the agreement set is
+%           [r^i(r^j,a) u PMP_i(a_def)] \cap [r^j(r^i,a) u PMP_j(a_def)],
+%         a_def = ro(r^i, r^j, a). Relative to the reference agreement set
+%         A = r^i(r^j,a) \cap r^j(r^i,a), the added points all lie in
+%         PMP_i(a_def) u PMP_j(a_def), hence weakly Pareto-improve a_def.
+%         Transitivity of sel then gives weak improvement for i.
+%         NOTE: comparing i's OLD program against this counterpart uses
+%         r^i evaluated at the argument E_j(r^j); Assumption 8(ii) (applied
+%         to i's own equilibrium function r^i) equates this with
+%         r^i(r^j, .). This is why 8(ii)'s scope covers equilibrium
+%         programs as well as belief supports, mirroring 8(i).
+%
+% (c) The PMM-guarantee step needs one more line of care than in either
+%     the original or the model's draft. It is NOT true in general that
+%     every point of the extended agreement set that is below-PMM for some
+%     player is Pareto-dominated by a point of
+%     PMP_1(a_def) \cap PMP_2(a_def)  (such a point x could lie in
+%     RN_1 \cap RN_2 with a very high payoff for the other player).
+%     Correct route: let A' be the extended agreement set and x = sel(A').
+%     (i) By transitivity, u(x) >= u(a_def).
+%     (ii) If u_i(x) < PMM_i for some i, then x is in neither PMP_1 nor
+%          PMP_2 (both require u_i >= max{PMM_i, u_i(a_def)} or equality),
+%          so x lies in the reference agreement set A; since a_def = sel(A)
+%          is Pareto-efficient in A and u(x) >= u(a_def), in fact
+%          u(x) = u(a_def), so u_i(a_def) < PMM_i.
+%     (iii) Any point m of PMP_1(a_def) \cap PMP_2(a_def) then satisfies
+%          u_i(m) = max{PMM_i, u_i(a_def)} > u_i(x) and
+%          u_j(m) = max{PMM_j, u_j(a_def)} >= u_j(x), and m is in A';
+%          this contradicts Pareto-efficiency of x = sel(A') within A'.
+%     CAVEAT (applies to the original proof and the model's draft alike):
+%     step (iii) needs PMP_1(a_def) \cap PMP_2(a_def) to be NONEMPTY,
+%     i.e., the payoff profile (max{PMM_1, u_1(a_def)},
+%     max{PMM_2, u_2(a_def)}) to be feasible. Nonemptiness of each
+%     PMP_i(a_def) separately (which is what the theorem's continuity
+%     hypothesis gives) does not imply this. It holds, e.g., if the
+%     feasible payoff set is comprehensive between the PMM and the
+%     frontier; consider adding this as an explicit hypothesis or lemma.
+%
+% (d) Downstream edits elsewhere in the paper:
+%     - Proposition 6 (prop:itspi): replace "Algorithm 2 with defaults p"
+%       by "Algorithm 2 with renegotiation function E_i(r^i) and defaults
+%       p"; the side condition PMP_i(a(p)) \subseteq RN_i(...) can be
+%       dropped, since the extension now supplies exactly those points.
+%     - The Remark after Theorem 3 (self-favoring extensions): the final
+%       sentence ("it's plausible that Assumption 8(ii) would be
+%       violated") should now say that a self-favoring extension does NOT
+%       behave identically to its base against non-reciprocating
+%       counterparts is false --- rather: the justification for 8(ii)
+%       fails for self-favoring extensions, because the counterpart has a
+%       genuine incentive to respond differently (the added points are
+%       better for them and worse for the focal player), so no analogous
+%       non-punishment assumption would be defensible.
+%     - Proposition 5 (tightness): the last paragraph of its proof
+%       verifies the old 8(ii) via "renegotiation sets independent of the
+%       counterpart's function". Under the new 8(ii) the verification is
+%       if anything easier (functions independent of the counterpart's
+%       function trivially respond identically to E_i(r^i) and r^i), but
+%       it should also be checked that the constructed programs remain
+%       best responses when PMP-extensions are available as deviations;
+%       since the constructed beliefs put probability 1 on non-extension
+%       counterparts, extending changes nothing against them, so the
+%       best-response argument is unaffected.
+%     - The n-player statements in the appendix: E_i(r^i)(rho^{-i}, a)
+%       adds PMP_i(ro(r^i, r^{-i}, a)) iff EVERY rho^j is a PMP-extension
+%       (with r^{-i} the profile of bases), and behaves as r^i otherwise.
+% ============================================================================
