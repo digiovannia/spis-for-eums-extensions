@@ -1,0 +1,23 @@
+\section{Feasibility of the CSR Outcome}
+\label{app:barg}
+
+Algorithm~\ref{alg:csr} implements the coordinatewise minimum of two
+payoff vectors, each weakly above a common feasible default. Here we
+verify that this payoff is feasible in a two-player game with a convex
+feasible payoff set. The incentive and PMM guarantees are proved
+directly for the algorithm in Theorem~\ref{prop:yudpoint} and
+Appendix~\ref{app:conditional-pmp-proof}.
+
+Let $d$ be the default payoff and $x,y\succeq d$ the two selected
+payoff vectors. If $x,y$ are comparable, their coordinatewise minimum
+is one of them. Otherwise, relabel them so that $x_1<y_1$ and $y_2<x_2$,
+and write $z=(x_1,y_2)$. Put $r=x_1-d_1$, $s=y_2-d_2$,
+$a=y_1-x_1>0$, and $b=x_2-y_2>0$.
+For $D=rb+as+ab>0$, direct substitution gives
+\[
+ z=\frac{ab}{D}d+\frac{as}{D}x+\frac{rb}{D}y.
+\]
+These coefficients are nonnegative and sum to one, so convexity
+makes $z$ feasible. If implemented by correlated randomization, this
+is a statement about expected utilities; both programs use the same
+lottery. The argument is specific to two players.
