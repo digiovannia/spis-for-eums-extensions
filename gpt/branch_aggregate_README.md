@@ -60,7 +60,7 @@ the new offers instead weakly improve on a common reference outcome.
 Transitivity requires a selector not to worsen the selected payoff when
 only such improvements are added.
 
-## What the result establishes
+## What the result establishes (NOT yet verified by Anthony)
 
 Under the stated non-punishment and feasibility assumptions, a
 subjectively optimal program remains optimal after PMP-extension.
